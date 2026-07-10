@@ -143,6 +143,21 @@
   .qs-note { text-align: center; color: var(--text-dim); font-size: 14px; margin-top: 18px; }
   .qs-note code { font-family: var(--mono); background: var(--surface-2); padding: 2px 7px; border-radius: 5px; font-size: 12.5px; color: var(--amber-ink); }
 
+  /* manifesto */
+  .manifesto { border-top: 1px solid var(--border-soft); border-bottom: 1px solid var(--border-soft); background: var(--surface); }
+  .manifesto .wrap { max-width: 900px; }
+  .manifesto .big { font-size: clamp(24px, 4.2vw, 40px); font-weight: 650; letter-spacing: -0.03em; line-height: 1.22; text-wrap: balance; margin: 0; }
+  .manifesto .big em { font-style: normal; color: var(--amber-ink); }
+  .manifesto .sub { color: var(--text-dim); font-size: clamp(16px, 2.2vw, 18px); margin-top: 22px; max-width: 640px; }
+  .timeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin: 44px 0 8px; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .tl { padding: 22px 22px; border-right: 1px solid var(--border); }
+  .tl:last-child { border-right: none; }
+  .tl.now { background: linear-gradient(180deg, var(--amber-glow), transparent); }
+  .tl .yr { font-family: var(--mono); font-size: 13px; color: var(--amber-ink); font-weight: 600; letter-spacing: 0.02em; }
+  .tl .ev { font-size: 14.5px; margin-top: 8px; color: var(--text); }
+  .tl .ev span { color: var(--text-dim); }
+  .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-dim); margin-top: 40px; }
+
   footer { border-top: 1px solid var(--border-soft); padding: 40px 0 60px; text-align: center; }
   footer .fbrand { font-family: var(--mono); font-weight: 700; font-size: 16px; }
   footer p { color: var(--text-dim); font-size: 13.5px; margin: 12px 0 0; }
@@ -156,6 +171,9 @@
     .compare { grid-template-columns: 1fr; }
     .stats { grid-template-columns: repeat(2, 1fr); }
     .mods { grid-template-columns: 1fr; }
+    .timeline { grid-template-columns: 1fr; }
+    .tl { border-right: none; border-bottom: 1px solid var(--border); }
+    .tl:last-child { border-bottom: none; }
     .nav-links a.hide-sm { display: none; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -199,6 +217,20 @@
       </div>
     </div>
   </header>
+
+  <section class="manifesto">
+    <div class="wrap">
+      <div class="kicker reveal">A quiet revolution</div>
+      <p class="big reveal">The Java stack trace hasn't changed since <em>1995</em>. The reader has.</p>
+      <p class="sub reveal">For thirty years the format was aimed at one reader: a human at a terminal with <code style="font-family:var(--mono);font-size:0.92em">grep</code> and a hunch. Then, quietly, the most frequent reader of an error log became an AI assistant — and nobody redesigned the log for it. Every pasted stack trace becomes an interrogation: <em style="font-style:italic;color:var(--text)">what happened before? which values? which version?</em> — ten messages of the AI asking for context that existed at the moment of the error and was thrown away.</p>
+      <div class="timeline reveal">
+        <div class="tl"><div class="yr">1995</div><div class="ev">The stack trace is born. <span>A human reads it with grep.</span></div></div>
+        <div class="tl"><div class="yr">2005–2020</div><div class="ev">JSON logs, MDC, tracing. <span>Still shaped for dashboards and humans.</span></div></div>
+        <div class="tl now"><div class="yr">Today</div><div class="ev">An AI reads your errors. <span>stacktale writes the log it actually needs.</span></div></div>
+      </div>
+      <p class="sub reveal" style="margin-top:26px;">Post-processing can't fix this — by the time the log is written, the story is already gone. The only place to capture it is <em style="font-style:italic;color:var(--text)">at the source</em>. That's the whole idea, and it's why a 1-line stack trace from 1995 and a stacktale report are not the same artifact at all.</p>
+    </div>
+  </section>
 
   <section>
     <div class="wrap">
