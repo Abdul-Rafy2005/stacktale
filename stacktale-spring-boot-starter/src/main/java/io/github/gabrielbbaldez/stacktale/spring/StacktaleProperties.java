@@ -1,11 +1,12 @@
 package io.github.gabrielbbaldez.stacktale.spring;
 
+import io.github.gabrielbbaldez.stacktale.ReportPipeline.Settings;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/** {@code stacktale.*} settings — every property mirrors the appender's defaults. */
+/** {@code stacktale.*} settings — every property mirrors the appender's defaults (one source in {@link Settings}). */
 @ConfigurationProperties(prefix = "stacktale")
 public class StacktaleProperties {
 
@@ -19,19 +20,19 @@ public class StacktaleProperties {
     private String appPackages = "";
 
     /** Events kept per context for the story. */
-    private int storySize = 15;
+    private int storySize = Settings.DEFAULT_STORY_SIZE;
 
     /** Max age of story events, seconds. */
-    private int storyWindowSeconds = 60;
+    private int storyWindowSeconds = Settings.DEFAULT_STORY_WINDOW_SECONDS;
 
     /** One full report per error fingerprint per window, seconds. */
-    private int dedupWindowSeconds = 300;
+    private int dedupWindowSeconds = Settings.DEFAULT_DEDUP_WINDOW_SECONDS;
 
     /** Size-based rotation threshold, MB. */
-    private int maxFileSizeMb = 5;
+    private int maxFileSizeMb = Settings.DEFAULT_MAX_FILE_SIZE_MB;
 
     /** Rotated backups kept (0 = start fresh on rotation). */
-    private int maxBackups = 1;
+    private int maxBackups = Settings.DEFAULT_MAX_BACKUPS;
 
     /** Drop the previous session's reports on startup. */
     private boolean truncateOnStart = false;
@@ -52,7 +53,7 @@ public class StacktaleProperties {
     private List<String> redactPatterns = new ArrayList<>();
 
     /** MDC keys that group the story per request. */
-    private String correlationMdcKeys = "traceId,correlationId,requestId";
+    private String correlationMdcKeys = Settings.DEFAULT_CORRELATION_MDC_KEYS;
 
     /** Timezone for report timestamps (empty = system default). */
     private String zone = "";
@@ -61,7 +62,7 @@ public class StacktaleProperties {
     private boolean requestLogging = true;
 
     /** Suppress container re-logs of a failure this thread just reported (0 = off). */
-    private long echoSuppressionMillis = 2000;
+    private long echoSuppressionMillis = Settings.DEFAULT_ECHO_SUPPRESSION_MILLIS;
 
     /** Extra logger prefixes treated as container echoes (added to the defaults). */
     private List<String> containerLoggers = new ArrayList<>();

@@ -114,11 +114,11 @@ public final class StacktaleAppender extends AbstractAppender {
         @PluginBuilderAttribute private String name = "STACKTALE";
         @PluginBuilderAttribute private String file = "errors-ai.log";
         @PluginBuilderAttribute private String appPackages = "";
-        @PluginBuilderAttribute private int storySize = 15;
-        @PluginBuilderAttribute private int storyWindowSeconds = 60;
-        @PluginBuilderAttribute private int dedupWindowSeconds = 300;
-        @PluginBuilderAttribute private int maxFileSizeMb = 5;
-        @PluginBuilderAttribute private int maxBackups = 1;
+        @PluginBuilderAttribute private int storySize = ReportPipeline.Settings.DEFAULT_STORY_SIZE;
+        @PluginBuilderAttribute private int storyWindowSeconds = ReportPipeline.Settings.DEFAULT_STORY_WINDOW_SECONDS;
+        @PluginBuilderAttribute private int dedupWindowSeconds = ReportPipeline.Settings.DEFAULT_DEDUP_WINDOW_SECONDS;
+        @PluginBuilderAttribute private int maxFileSizeMb = ReportPipeline.Settings.DEFAULT_MAX_FILE_SIZE_MB;
+        @PluginBuilderAttribute private int maxBackups = ReportPipeline.Settings.DEFAULT_MAX_BACKUPS;
         @PluginBuilderAttribute private boolean truncateOnStart = false;
         @PluginBuilderAttribute private boolean installUncaughtHandler = true;
         @PluginBuilderAttribute private boolean reportErrorsWithoutThrowable = true;
@@ -126,10 +126,10 @@ public final class StacktaleAppender extends AbstractAppender {
         @PluginBuilderAttribute private boolean redactionEnabled = true;
         /** Extra redaction regexes, separated by {@code ;;} (regexes may contain commas). */
         @PluginBuilderAttribute private String redactPatterns = "";
-        @PluginBuilderAttribute private String correlationMdcKeys = "traceId,correlationId,requestId";
+        @PluginBuilderAttribute private String correlationMdcKeys = ReportPipeline.Settings.DEFAULT_CORRELATION_MDC_KEYS;
         @PluginBuilderAttribute private String zone = "";
         /** 0 disables container-echo suppression. */
-        @PluginBuilderAttribute private long echoSuppressionMillis = 2000;
+        @PluginBuilderAttribute private long echoSuppressionMillis = ReportPipeline.Settings.DEFAULT_ECHO_SUPPRESSION_MILLIS;
         /** Comma-separated logger prefixes treated as container echoes (empty = defaults). */
         @PluginBuilderAttribute private String containerLoggers = "";
         /** Also emit each report block as ONE event via logger {@code stacktale.reports}. */
@@ -200,8 +200,7 @@ public final class StacktaleAppender extends AbstractAppender {
         }
 
         private static List<String> csv(String s) {
-            return s == null || s.isBlank() ? List.of()
-                    : Arrays.stream(s.split(",")).map(String::trim).filter(x -> !x.isEmpty()).toList();
+            return io.github.gabrielbbaldez.stacktale.Csv.parse(s);
         }
 
         public Builder setName(String name) { this.name = name; return this; }

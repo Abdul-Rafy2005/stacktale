@@ -50,6 +50,17 @@ public final class ReportPipeline {
         public static final List<String> DEFAULT_CONTAINER_LOGGERS =
                 List.of("org.apache.catalina.core.ContainerBase");
 
+        // Defaults, one source of truth — referenced by the Builder AND every framework
+        // appender/property class so a change can't drift between backends. Human units
+        // (seconds/MB) where the appenders expose them; the Builder converts to millis/bytes.
+        public static final int DEFAULT_STORY_SIZE = 15;
+        public static final int DEFAULT_STORY_WINDOW_SECONDS = 60;
+        public static final int DEFAULT_DEDUP_WINDOW_SECONDS = 300;
+        public static final int DEFAULT_MAX_FILE_SIZE_MB = 5;
+        public static final int DEFAULT_MAX_BACKUPS = 1;
+        public static final long DEFAULT_ECHO_SUPPRESSION_MILLIS = 2000;
+        public static final String DEFAULT_CORRELATION_MDC_KEYS = "traceId,correlationId,requestId";
+
         public static Builder builder() {
             return new Builder();
         }
@@ -63,19 +74,19 @@ public final class ReportPipeline {
         public static final class Builder {
             private String file = "errors-ai.log";
             private List<String> appPackages = List.of();
-            private int storySize = 15;
-            private long storyWindowMillis = 60_000;
-            private long dedupWindowMillis = 300_000;
-            private long maxFileBytes = 5L * 1024 * 1024;
-            private int maxBackups = 1;
+            private int storySize = DEFAULT_STORY_SIZE;
+            private long storyWindowMillis = DEFAULT_STORY_WINDOW_SECONDS * 1000L;
+            private long dedupWindowMillis = DEFAULT_DEDUP_WINDOW_SECONDS * 1000L;
+            private long maxFileBytes = DEFAULT_MAX_FILE_SIZE_MB * 1024L * 1024L;
+            private int maxBackups = DEFAULT_MAX_BACKUPS;
             private boolean truncateOnStart = false;
             private boolean reportErrorsWithoutThrowable = true;
             private boolean captureExceptionFields = true;
             private boolean redactionEnabled = true;
             private List<Pattern> redactPatterns = List.of();
-            private List<String> correlationMdcKeys = List.of("traceId", "correlationId", "requestId");
+            private List<String> correlationMdcKeys = Csv.parse(DEFAULT_CORRELATION_MDC_KEYS);
             private ZoneId zone = ZoneId.systemDefault();
-            private long echoSuppressionMillis = 2000;
+            private long echoSuppressionMillis = DEFAULT_ECHO_SUPPRESSION_MILLIS;
             private List<String> containerLoggers = DEFAULT_CONTAINER_LOGGERS;
             private boolean emitReportsToLogger = false;
             private int maxReportsPerMinute = 0;

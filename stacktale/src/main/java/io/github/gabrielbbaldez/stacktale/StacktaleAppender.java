@@ -27,20 +27,20 @@ public final class StacktaleAppender extends UnsynchronizedAppenderBase<ILogging
 
     private String file = "errors-ai.log";
     private String appPackages = "";
-    private int storySize = 15;
-    private int storyWindowSeconds = 60;
-    private int dedupWindowSeconds = 300;
-    private int maxFileSizeMb = 5;
-    private int maxBackups = 1;
+    private int storySize = ReportPipeline.Settings.DEFAULT_STORY_SIZE;
+    private int storyWindowSeconds = ReportPipeline.Settings.DEFAULT_STORY_WINDOW_SECONDS;
+    private int dedupWindowSeconds = ReportPipeline.Settings.DEFAULT_DEDUP_WINDOW_SECONDS;
+    private int maxFileSizeMb = ReportPipeline.Settings.DEFAULT_MAX_FILE_SIZE_MB;
+    private int maxBackups = ReportPipeline.Settings.DEFAULT_MAX_BACKUPS;
     private boolean truncateOnStart = false;
     private boolean installUncaughtHandler = true;
     private boolean reportErrorsWithoutThrowable = true;
     private boolean captureExceptionFields = true;
     private boolean redactionEnabled = true;
     private final List<String> redactPatterns = new java.util.ArrayList<>();
-    private String correlationMdcKeys = "traceId,correlationId,requestId";
+    private String correlationMdcKeys = ReportPipeline.Settings.DEFAULT_CORRELATION_MDC_KEYS;
     private String zone = "";
-    private long echoSuppressionMillis = 2000;
+    private long echoSuppressionMillis = ReportPipeline.Settings.DEFAULT_ECHO_SUPPRESSION_MILLIS;
     private final List<String> containerLoggers =
             new java.util.ArrayList<>(ReportPipeline.Settings.DEFAULT_CONTAINER_LOGGERS);
     private boolean emitReportsToLogger = false;
@@ -173,8 +173,7 @@ public final class StacktaleAppender extends UnsynchronizedAppenderBase<ILogging
     }
 
     private static List<String> csv(String s) {
-        return s == null || s.isBlank() ? List.of()
-                : Arrays.stream(s.split(",")).map(String::trim).filter(x -> !x.isEmpty()).toList();
+        return Csv.parse(s);
     }
 
     // --- Logback config setters ---
